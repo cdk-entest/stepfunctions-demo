@@ -2,6 +2,122 @@
 
 <img width="603" alt="Screen Shot 2022-07-31 at 15 30 38" src="https://user-images.githubusercontent.com/20411077/182017641-0dc80683-6c69-4dad-aa6e-28f7d3396a74.png">
 
+create the submit lambda
+
+```tsx
+const submit = new aws_lambda.Function(this, "SubmitLambda", {
+  functionName: "SubmitFunction",
+  code: new aws_lambda.InlineCode(
+    fs.readFileSync(path.resolve(__dirname, "./../lambda/submit.py"), {
+      encoding: "utf-8",
+    })
+  ),
+  handler: "index.main",
+  timeout: Duration.seconds(10),
+  runtime: aws_lambda.Runtime.PYTHON_3_8,
+});
+```
+
+create the check status lambda
+
+```tsx
+// get status lambda function
+const checkStatus = new aws_lambda.Function(this, "CheckStatusFunction", {
+  functionName: "CheckStatusFunction",
+  code: new aws_lambda.InlineCode(
+    fs.readFileSync(path.resolve(__dirname, "./../lambda/check_status.py"), {
+      encoding: "utf-8",
+    })
+  ),
+  handler: "index.main",
+  runtime: aws_lambda.Runtime.PYTHON_3_8,
+  timeout: Duration.seconds(10),
+});
+```
+
+create a submit task
+
+```tsx
+const submitTask = new aws_stepfunctions_tasks.LambdaInvoke(this, "SubmitJob", {
+  lambdaFunction: submit,
+  outputPath: "$",
+});
+```
+
+create a wait
+
+```tsx
+const waitX = new aws_stepfunctions.Wait(this, "WaitXSeconds", {
+  time: aws_stepfunctions.WaitTime.duration(Duration.seconds(10)),
+});
+```
+
+create a check status
+
+```tsx
+const checkStatusTask = new aws_stepfunctions_tasks.LambdaInvoke(
+  this,
+  "CheckStatusTask",
+  {
+    lambdaFunction: checkStatus,
+    outputPath: "$.Payload",
+  }
+);
+```
+
+create the job failed
+
+```tsx
+const jobFailed = new aws_stepfunctions.Fail(this, "JobFailed", {
+  cause: "AWS Batch Job Failed",
+  error: "Described returned FAILED",
+});
+```
+
+create the final status
+
+```tsx
+const finalStatus = new aws_stepfunctions_tasks.LambdaInvoke(
+  this,
+  "GetFinalJobStatus",
+  {
+    lambdaFunction: checkStatus,
+    outputPath: "$.Payload",
+  }
+);
+```
+
+chain tasks into a state machine
+
+```tsx
+// create chain
+const definition = submitTask
+  .next(waitX)
+  .next(checkStatusTask)
+  .next(
+    new aws_stepfunctions.Choice(this, "Job Complete?")
+      .when(
+        aws_stepfunctions.Condition.stringEquals("$.status", "FAILED"),
+        jobFailed
+      )
+      .when(
+        aws_stepfunctions.Condition.stringEquals("$.status", "SUCCEEDED"),
+        finalStatus
+      )
+      .otherwise(jobFailed)
+  );
+
+// state machine
+const stateMachine = new aws_stepfunctions.StateMachine(
+  this,
+  "StateMachineDemo",
+  {
+    timeout: Duration.minutes(2),
+    definition: definition,
+  }
+);
+```
+
 ## Transfer Data Record State Machine
 
 <img width="603" alt="Screen Shot 2022-07-31 at 15 30 04" src="https://user-images.githubusercontent.com/20411077/182017643-e00c6a45-849d-405f-b158-1ce08f62cb6f.png">
