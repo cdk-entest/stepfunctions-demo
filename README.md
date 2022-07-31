@@ -1,3 +1,18 @@
+## Getting Started with Stepfunctions
+
+Stepfunctions can be used for
+
+- Data processing workflows
+- Machine Learning pipelines
+- Impelement backend with branches (if/else)
+
+Stepfunctions can be created by
+
+- Using CDK
+- JSON definition
+
+In this [GitHub](https://github.com/entest-hai/stepfunctions-demo), I implement some stepfunctions described from [aws docs](https://docs.aws.amazon.com/step-functions/latest/dg/sample-project-transfer-data-sqs.html)
+
 ## Pooler Job State Machine
 
 <img width="603" alt="Screen Shot 2022-07-31 at 15 30 38" src="https://user-images.githubusercontent.com/20411077/182017641-0dc80683-6c69-4dad-aa6e-28f7d3396a74.png">
