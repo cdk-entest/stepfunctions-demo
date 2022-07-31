@@ -1,11 +1,10 @@
 ## Pooler Job State Machine
 
-![stepfunctions_graph](https://user-images.githubusercontent.com/20411077/181926119-485179bb-2b50-4a34-ae52-c60a69fc29c7.png)
+<img width="603" alt="Screen Shot 2022-07-31 at 15 30 38" src="https://user-images.githubusercontent.com/20411077/182017641-0dc80683-6c69-4dad-aa6e-28f7d3396a74.png">
 
-## Transfer Data Record State Machine 
+## Transfer Data Record State Machine
 
-![stepfunctions_graph(1)](https://user-images.githubusercontent.com/20411077/181926116-8a71d316-99f6-48bc-a8c5-8ae0b82e5ddc.png)
-
+<img width="603" alt="Screen Shot 2022-07-31 at 15 30 04" src="https://user-images.githubusercontent.com/20411077/182017643-e00c6a45-849d-405f-b158-1ce08f62cb6f.png">
 
 ## Reference
 

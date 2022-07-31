@@ -85,13 +85,14 @@ export class TrasnferDataRecordStack extends Stack {
       {}
     );
 
+
     const definition = seedTask.next(
       conditionLoop
         .when(
           aws_stepfunctions.Condition.stringEquals("$.List[0]", "DONE"),
           new aws_stepfunctions.Succeed(this, "Finish")
         )
-        .otherwise(readNextItem.next(popItemFromList.next(conditionLoop)))
+        .otherwise(readNextItem.next(popItemFromList).next(conditionLoop))
     );
 
     const stateMachine = new aws_stepfunctions.StateMachine(
