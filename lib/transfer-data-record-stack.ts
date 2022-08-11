@@ -6,7 +6,6 @@ import {
   aws_lambda,
   aws_stepfunctions,
   aws_stepfunctions_tasks,
-  Duration,
   Stack,
   StackProps,
 } from "aws-cdk-lib";
