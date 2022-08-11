@@ -13,6 +13,12 @@ Stepfunctions can be created by
 
 In this [GitHub](https://github.com/entest-hai/stepfunctions-demo), I implement some stepfunctions described from [aws docs](https://docs.aws.amazon.com/step-functions/latest/dg/sample-project-transfer-data-sqs.html)
 
+## Iterate a Lambda Function 
+
+![Screen Shot 2022-08-11 at 13 24 56](https://user-images.githubusercontent.com/20411077/184075789-efe2c6a0-fad8-4b08-8c9c-64bb6b6c54bc.png)
+
+
+
 ## Pooler Job State Machine
 
 <img width="603" alt="Screen Shot 2022-07-31 at 15 30 38" src="https://user-images.githubusercontent.com/20411077/182017641-0dc80683-6c69-4dad-aa6e-28f7d3396a74.png">
