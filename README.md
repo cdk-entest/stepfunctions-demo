@@ -1,3 +1,11 @@
+---
+title: Getting Started with Stepfunctions
+description: Gettign started with Stepfunctions using CDK. Impelement some simple stack machine from aws docs.
+author: haimtran
+publishedDate: 07/31/2022
+date: 2022-07-31
+---
+
 ## Getting Started with Stepfunctions
 
 Stepfunctions can be used for
