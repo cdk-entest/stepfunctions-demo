@@ -15,7 +15,7 @@ In this [GitHub](https://github.com/entest-hai/stepfunctions-demo), I implement 
 
 ## Iterate a Lambda Function
 
-![Screen Shot 2022-08-11 at 13 24 56](https://user-images.githubusercontent.com/20411077/184075789-efe2c6a0-fad8-4b08-8c9c-64bb6b6c54bc.png)
+![Screen Shot 2022-08-11 at 13 24 56](https://user-images.githubusercontent.com/20411077/184076317-fa7415ea-7c5e-4dc9-a157-46130e537a09.png)
 
 get number of iteration
 
