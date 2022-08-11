@@ -13,11 +13,85 @@ Stepfunctions can be created by
 
 In this [GitHub](https://github.com/entest-hai/stepfunctions-demo), I implement some stepfunctions described from [aws docs](https://docs.aws.amazon.com/step-functions/latest/dg/sample-project-transfer-data-sqs.html)
 
-## Iterate a Lambda Function 
+## Iterate a Lambda Function
 
 ![Screen Shot 2022-08-11 at 13 24 56](https://user-images.githubusercontent.com/20411077/184075789-efe2c6a0-fad8-4b08-8c9c-64bb6b6c54bc.png)
 
+get number of iteration
 
+```tsx
+const getNumIterLambda = new aws_lambda.Function(this, "GetNumIterLambda", {
+  code: aws_lambda.Code.fromInline(
+    fs.readFileSync(
+      path.resolve(__dirname, "./../lambda/get-num-iter-lambda.py"),
+      { encoding: "utf-8" }
+    )
+  ),
+  handler: "index.main",
+  runtime: aws_lambda.Runtime.PYTHON_3_8,
+});
+```
+
+processing an iteration
+
+```tsx
+const iterLambda = new aws_lambda.Function(this, "IterLambda", {
+  runtime: aws_lambda.Runtime.PYTHON_3_8,
+  code: aws_lambda.Code.fromInline(
+    fs.readFileSync(path.resolve(__dirname, "./../lambda/iter-lambda.py"), {
+      encoding: "utf-8",
+    })
+  ),
+  handler: "index.main",
+});
+```
+
+get number of iteration task
+
+```tsx
+const getNumIter = new aws_stepfunctions_tasks.LambdaInvoke(
+  this,
+  "GetNumIter",
+  {
+    lambdaFunction: getNumIterLambda,
+    outputPath: "$.Payload",
+  }
+);
+```
+
+process an iter task
+
+```tsx
+const nextIter = new aws_stepfunctions_tasks.LambdaInvoke(
+  this,
+  "LambdaProcessJob",
+  {
+    lambdaFunction: iterLambda,
+    outputPath: "$.Payload",
+  }
+);
+```
+
+state machine definition
+
+```tsx
+const definition = getNumIter.next(
+  new aws_stepfunctions.Choice(this, "Loop Completed?")
+    .when(
+      aws_stepfunctions.Condition.numberEquals("$.counter", 0),
+      new aws_stepfunctions.Succeed(this, "Finish")
+    )
+    .when(
+      aws_stepfunctions.Condition.numberGreaterThan("$.counter", 0),
+      nextIter
+    )
+);
+
+new aws_stepfunctions.StateMachine(this, "LambdaIterMachine", {
+  stateMachineName: "LambdaIter",
+  definition: definition,
+});
+```
 
 ## Pooler Job State Machine
 
